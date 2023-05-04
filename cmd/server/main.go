@@ -27,11 +27,23 @@ func Run() error {
 	fmt.Println("successfully connected and migrated database")
 
 	cmtSevice := comment.NewService(db)
-	fmt.Println(cmtSevice.GetComment(
-		context.Background(),
-		"ebe26a6d-cce4-41e2-a889-cc3fc637bfba",
-	))
 
+	cmt, err := cmtSevice.GetComment(context.Background(), "d9121b94-26f8-49d8-80af-a18affec60fb")
+	if err != nil {
+		fmt.Println("Error getting comment")
+	}
+	fmt.Println(cmt)
+	/*
+		cmtSevice.PostComment(
+			context.Background(),
+			comment.Comment{
+				ID:     "ebe26a6d-cce4-41e2-a889-cc3fc637bfba",
+				Slug:   "manual-test",
+				Author: "Kirill",
+				Body:   "Hello, World",
+			},
+		)
+	*/
 	return nil
 }
 
