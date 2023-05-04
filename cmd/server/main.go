@@ -1,10 +1,10 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"github.com/allnightru/go-sandbox3/internal/comment"
-	db2 "github.com/allnightru/go-sandbox3/internal/db"
+	"github.com/allnightru/go-sandbox3/internal/db"
+	transportHttp "github.com/allnightru/go-sandbox3/internal/transport/http"
 )
 
 // Run - is going to be responsible for
@@ -13,7 +13,7 @@ import (
 func Run() error {
 	fmt.Println("starting up our application")
 
-	db, err := db2.NewDatabase()
+	db, err := db.NewDatabase()
 	if err != nil {
 		fmt.Println("Failed to connect to the database")
 		return err
@@ -28,22 +28,11 @@ func Run() error {
 
 	cmtSevice := comment.NewService(db)
 
-	cmt, err := cmtSevice.GetComment(context.Background(), "d9121b94-26f8-49d8-80af-a18affec60fb")
-	if err != nil {
-		fmt.Println("Error getting comment")
+	httpHandler := transportHttp.NewHandler(cmtSevice)
+	if err := httpHandler.Serve(); err != nil {
+
 	}
-	fmt.Println(cmt)
-	/*
-		cmtSevice.PostComment(
-			context.Background(),
-			comment.Comment{
-				ID:     "ebe26a6d-cce4-41e2-a889-cc3fc637bfba",
-				Slug:   "manual-test",
-				Author: "Kirill",
-				Body:   "Hello, World",
-			},
-		)
-	*/
+
 	return nil
 }
 
